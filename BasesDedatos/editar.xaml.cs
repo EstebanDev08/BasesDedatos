@@ -20,6 +20,8 @@ namespace BasesDedatos
     /// </summary>
     public partial class editar : Window
     {
+
+        //variables para guardar inf
         public int IdClient;
         public string name;
         public string direccion;
@@ -33,14 +35,19 @@ namespace BasesDedatos
 
 
 
+        //clic en editar
         public void Button_Click(object sender, RoutedEventArgs e)
         {
+
+            //verificamos que los texbox se hayan modificado a lmenos uno
             if (name != Boxname.Text || direccion != Boxdireccion.Text || telefono != Boxtelefono.Text || poblacion != Boxpoblacion.Text)
             {
 
                 using (var conection = new ConectionSql.ConectionToSql().getConnection())
                 {
                     conection.Open();
+
+                    //consulta para editar
 
                     string consulta = "UPDATE clientes SET nombre = @Nnombre, Direccion = @Ndireccion, Poblacion =@Npoblacion, Telefono = @Ntelefono WHERE Id = @clientId";
 

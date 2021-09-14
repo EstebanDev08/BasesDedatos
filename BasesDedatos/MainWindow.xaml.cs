@@ -38,6 +38,8 @@ namespace BasesDedatos
         private  ConectionToSql conectionToSql = new();
 
 
+
+        //show all clients in BBDD 
         public void muestraclientes()
         {
 
@@ -59,7 +61,7 @@ namespace BasesDedatos
         }
 
 
-
+        
         public void muestraPedidos()
         {
             var id = ListBoxclientes.SelectedValue;
@@ -115,6 +117,8 @@ namespace BasesDedatos
 
         }
 
+
+        //clear selected element of the BBDD
         private void BorrarButton_Click(object sender, RoutedEventArgs e)
         {
             if (listaAllPedidos.SelectedValue != null)
@@ -150,6 +154,8 @@ namespace BasesDedatos
             }
         }
 
+
+        //ADD inf in BBDD
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -189,19 +195,27 @@ namespace BasesDedatos
               
         }
 
+
+
+
+        // boton para editar el cliente.
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+            //verificamos que este selecionado
             if (ListBoxclientes.SelectedValue != null)
             {
 
 
+                // instanciamos la ventana
                 editar frmEditar = new editar();
+
+
+                // sobrecargamos el evento close para que actualice los datos al cerrar la ventana de editar
                 frmEditar.Closing += cerrando;
 
 
 
-
+                //empezamos la coneccion
                 using (var conection = new ConectionToSql().getConnection()) 
                 {
 
@@ -210,7 +224,7 @@ namespace BasesDedatos
                     string consulta = "select * from clientes where Id=@idcliente";
                     
 
-
+                    //iniciamos el command
                     using (SqlCommand comand = new SqlCommand(consulta, conection))
                     {
 
@@ -220,19 +234,22 @@ namespace BasesDedatos
                         SqlDataReader reader = comand.ExecuteReader();
 
 
+                        //verificamos que encontremos datos
                         if (reader.HasRows)
                         {
 
-
+                            //mientras haya filas 
                             while (reader.Read())
                             {
+
+                                // guardamos la informacion en  variables de la ventana editar
                                 frmEditar.name = reader.GetString(1);
                                 frmEditar.direccion = reader.GetString(2);
                                 frmEditar.poblacion = reader.GetString(3);
                                 frmEditar.telefono = reader.GetString(4);
                                 
 
-
+                                //los boxtext se rellenan de la inf
                                 frmEditar.Boxname.Text = reader.GetString(1);
                                 frmEditar.Boxdireccion.Text = reader.GetString(2);
                                 frmEditar.Boxpoblacion.Text = reader.GetString(3);
@@ -241,6 +258,8 @@ namespace BasesDedatos
 
                             }
 
+
+                            // mostramos ventana editar con showDialog
                             frmEditar.ShowDialog();
 
                         }
@@ -264,6 +283,7 @@ namespace BasesDedatos
 
             
         }
+
 
         private void cerrando(object sender, CancelEventArgs e)
         {
